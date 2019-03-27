@@ -1,0 +1,67 @@
+body {
+  background-color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+
+svg {
+       height: 45%;
+    width: 45%;
+    position: absolute;
+    left: 35%;
+    top: 29%;
+   animation: grow 2s ease-in 0s 1, pulsate 15s linear 2s infinite;
+    -webkit-animation: grow 2s ease-in 0s 1, pulsate 15s linear 2s infinite;
+    z-index: 0;
+    filter: drop-shadow(0 0 1.50rem grey);
+}
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg); 
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    -webkit-transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(1.1)
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes grow {
+  0% {
+    -webkit-transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+
+.T-main {
+    transition: ease-in-out 0.5s;
+   transition-timing-function: cubic-bezier(0.42,0,0.58,1);
+    -webkit-transition-timing-function: cubic-bezier(0.42,0,0.58,1);
+    transform-origin: 50% 50%;
+}
+  .T-main:hover {
+    transform: scale(1.07);
+  }
+
