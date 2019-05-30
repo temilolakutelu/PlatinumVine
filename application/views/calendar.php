@@ -1,206 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>Calendar Display</title>
-    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>calendar/fullcalendar.min.css" />
-    <script src="<?php echo base_url() ?>calendar/lib/moment.min.js"></script>
-    <script src="<?php echo base_url() ?>calendar/fullcalendar.min.js"></script>
-    <script src="<?php echo base_url() ?>calendar/gcal.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/cal-init.js"></script>
+<link rel="stylesheet" href="http://fullcalendar.io/releases/fullcalendar/3.10.0/fullcalendar.min.css">
+<script src='http://fullcalendar.io/releases/fullcalendar/3.10.0/lib/moment.min.js'></script>
+<script src='http://fullcalendar.io/releases/fullcalendar/3.10.0/lib/jquery.min.js'></script>
+<script src='http://fullcalendar.io/releases/fullcalendar/3.10.0/fullcalendar.min.js'></script>
 
 
-</head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
 
-<body>
+            <h2>Events Calendar</h2>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-
-                <h1>Platinum Vine Calendar</h1>
-
-                <div id="calendar">
-
-                </div>
+            <div id="calendar">
 
             </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        outline: none !important;
+    }
+
+    #calendar>.fc-toolbar>.fc-left>*,
+    #calendar>.fc-toolbar>.fc-left>.btn-group>*,
+    #calendar>.fc-toolbar>.fc-right>*,
+    #calendar>.fc-toolbar>.fc-right>.btn-group>* {
+        color: white;
+        background: #080c12;
+        outline: none!important;
+        border: 1px solid;
+    }
+
+    #calendar>.fc-toolbar>.fc-left>.btn-group>*:hover,
+    #calendar>.fc-toolbar>.fc-left>.btn-group>*:active,
+    #calendar>.fc-toolbar>.fc-right>.btn-group>*:hover,
+    #calendar>.fc-toolbar>.fc-right>.btn-group>*:active,
+        {
+        background: grey;
+        outline: none !important;
+    }
+</style>
+
+<div class="modal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <h4 class="modal-title" id="myModalLabel"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
         </div>
     </div>
 
-    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add Calendar Event</h4>
-                </div>
-                <div class="modal-body">
-                    <?php echo form_open(site_url("event/add_event"), array("class" => "form-horizontal")) ?>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Event Name</label>
-                        <div class="col-md-8 ui-front">
-                            <input type="text" class="form-control" name="name" value="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Description</label>
-                        <div class="col-md-8 ui-front">
-                            <input type="text" class="form-control" name="description">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Start Date</label>
-                        <div class="col-md-8">
-                            <div class='input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" name='start_date' />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
+</div>
 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">End Date</label>
-                        <div class="col-md-8">
-                            <div class='input-group date' id='datetimepicker2'>
-                                <input type='text' class="form-control" name='end_date' />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Add Event">
-                    <?php echo form_close() ?>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Update Calendar Event</h4>
-                </div>
-                <div class="modal-body">
-                    <?php echo form_open(site_url("event/edit_event"), array("class" => "form-horizontal")) ?>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Event Name</label>
-                        <div class="col-md-8 ui-front">
-                            <input type="text" class="form-control" name="name" value="" id="name">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Description</label>
-                        <div class="col-md-8 ui-front">
-                            <input type="text" class="form-control" name="description" id="description">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Start Date</label>
-                        <div class="col-md-8">
-                            <div class='input-group date' id='datetimepicker3'>
-                                <input type='text' class="form-control" name='start_date' />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">End Date</label>
-                        <div class="col-md-8">
-                            <div class='input-group date' id='datetimepicker4'>
-                                <input type='text' class="form-control" name='end_date' />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="p-in" class="col-md-4 label-heading">Delete Event</label>
-                        <div class="col-md-8">
-                            <input type="checkbox" name="delete" value="1">
-                        </div>
-                    </div>
-                    <input type="hidden" name="eventid" id="event_id" value="0" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Update Event">
-                    <?php echo form_close() ?>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+<script type="text/javascript">
+    $(document).ready(function() {
 
-            var date_last_clicked = null;
+        var date_last_clicked = null;
 
-            $('#calendar').fullCalendar({
-                eventSources: [{
-                    events: function(start, end, timezone, callback) {
-                        $.ajax({
-                            url: '<?php echo base_url() ?>event/get_events',
-                            dataType: 'json',
-                            data: {
-                                // our hypothetical feed requires UNIX timestamps
-                                start: start.unix(),
-                                end: end.unix()
-                            },
-                            success: function(msg) {
-                                var events = msg.events;
-                                callback(events);
-                            }
-                        });
+        $('#calendar').fullCalendar({
+            themeSystem: 'bootstrap4',
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listMonth'
+            },
+            weekNumbers: true,
+            eventLimit: true,
+            eventSources: [{
+                events: function(start, end, timezone, callback) {
+                    $.ajax({
+                        url: '<?php echo base_url() ?>event/get_events',
+                        dataType: 'json',
+                        data: {
+                            // our hypothetical feed requires UNIX timestamps
+                            start: start.unix(),
+                            end: end.unix()
+                        },
+                        success: function(msg) {
+                            var events = msg.events;
+                            callback(events);
+                        }
+                    });
+                }
+            }, ],
+            eventClick: function(event, jsEvent, view) {
+                $('.modal-title').html(event.title);
+                $('.modal-body').html(event.description);
+                // Get the modal
+                $('#editModal').css('display', 'block');
+                $('.close').click(function() {
+                    $('#editModal').css('display', 'none');
+                })
+                // When the user clicks anywhere outside of the modal, close it
+                $(document).on("click", function(event) {
+                    if ($(event.target).has(".modal-content").length) {
+                        $('#editModal').css('display', 'none');
                     }
-                }, ],
-                dayClick: function(date, jsEvent, view) {
-                    date_last_clicked = $(this);
-                    $(this).css('background-color', '#bed7f3');
-                    $('#addModal').modal();
-                },
-                eventClick: function(event, jsEvent, view) {
-                    $('#name').val(event.title);
-                    $('#description').val(event.description);
-                    $('#start_date').val(moment(event.start).format('YYYY/MM/DD HH:mm'));
-                    if (event.end) {
-                        $('#end_date').val(moment(event.end).format('YYYY/MM/DD HH:mm'));
-                    } else {
-                        $('#end_date').val(moment(event.start).format('YYYY/MM/DD HH:mm'));
-                    }
-                    $('#event_id').val(event.id);
-                    $('#editModal').modal();
-                },
-            });
+                });
+            },
         });
-    </script>
-    <script type="text/javascript">
-        $(function() {
-            $('#datetimepicker1').datetimepicker();
-            $('#datetimepicker2').datetimepicker();
-            $('#datetimepicker3').datetimepicker();
-            $('#datetimepicker4').datetimepicker();
-        });
-    </script>
-</body>
-
-</html> 
+    });
+</script> 

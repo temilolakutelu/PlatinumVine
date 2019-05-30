@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Platinum Vine</title>
     <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url() ?>assets/img/pv-logo.png">
-    <link rel="stylesheet" href="<?= base_url(); ?>assets/index.css">
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/index.css">
 
 </head>
 
@@ -47,7 +47,7 @@
     </a>
 
     <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src=' <?=base_url ();?>assets/script.js'></script>
+    <script src=' <?=base_url ();?>assets/js/script.js'></script>
 
 </body>
 
